@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import "bootstrap/dist/css/bootstrap.min.css";
 import './User.css';
 
 class User extends Component {
