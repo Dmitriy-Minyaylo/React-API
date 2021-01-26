@@ -1,22 +1,24 @@
-import React, { Component } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import './User.css';
 
-class User extends Component {
-   render() {
-      // свойства профиля юзера
-      const {
-         name,
-         gender,
-         location,
-         login,
-         dob,
-         avatar,
-         email,
-         phone,
-         isLoading } = this.props;
-      // как будет выглядить отрисовка профиля 
-      const userDetails = (
+// получаем пропсы и отрисовуем с нужными стилями UI
+const User = ({
+   name,
+   gender,
+   location,
+   login,
+   dob,
+   avatar,
+   email,
+   phone,
+}) => {
+
+   return (
+      <div
+         className="main mx-auto mt-4 text-center p-5"
+         style={{ maxWidth: "600px", minHeight: "350px" }}
+      >
          <div>
             <img
                className="img-thumbnail rounded-circle mx-auto mb-2 shadow-lg"
@@ -32,21 +34,10 @@ class User extends Component {
             <h3>{dob} y.o.</h3>
             <h3 className="text-muted">My nickname: {login}</h3>
          </div>
-      );
-      // отрисовка сообщения при загрузке
-      const loadingMessage = <span className="d-flex m-auto">
-         <h2>Loading... Wait or Press F5 again</h2>
-      </span>;
-      return (
-         <div
-            className="main mx-auto mt-4 text-center p-5"
-            style={{ maxWidth: "600px", minHeight: "350px" }}
-         >
-            {isLoading ? loadingMessage : userDetails}
-         </div>
-      );
-   }
+      </div>
+   )
 }
+
 User.propTypes = {
    name: PropTypes.string,
    avatar: PropTypes.string,
@@ -55,6 +46,6 @@ User.propTypes = {
    gender: PropTypes.string,
    login: PropTypes.string,
    location: PropTypes.string,
-   isLoading: PropTypes.bool
 };
+
 export default User;

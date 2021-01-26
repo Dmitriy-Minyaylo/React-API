@@ -1,82 +1,48 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
 import API from "../../services";
 import User from "../User";
 
-class App extends Component {
-   constructor(props) {
-      super(props);
-      this.state = {
-         isLoading: true,
-         name: null,
-         phone: null,
-         avatar: null,
-         email: null,
-         gender: null,
-         location: null,
-         timezone: null,
-         login: null,
-         dob: null
-      };
-   }
-   render() {
-      const {
-         isLoading,
-         name,
-         phone,
-         avatar,
-         gender,
-         location,
-         login,
-         dob,
-         email } = this.state;
-      return (
-         <User
-            isLoading={isLoading}
-            name={name}
-            avatar={avatar}
-            email={email}
-            phone={phone}
-            gender={gender}
-            location={location}
-            login={login}
-            dob={dob}
-         />
-      );
-   }
-   // делаем обращение к api используя жизненный цикл 
-   async componentDidMount() {
-      // ждем, пока получим данные с api сервера
-      let userData = await API.get('/', {
-         params: {
-            results: 1,
-            inc: 'name, email, picture, phone, gender, location, login, dob'
+
+const App = () => {
+   // переменная пользователя с его состоянием
+   const [user, setUser] = useState()
+   console.log('user', user);
+   // использование данных с api и передача его в состояние
+   useEffect(() => {
+      API.getUser()
+         // после получения результата передаем данные в state
+         .then((result) => {
+            console.log('result', result);
+            // нужный объект находится в коллекции массива 
+            setUser(result.data.results[0])
+         })
+         // отлавливание ошибок
+         .catch((error) => {
+            console.log('ERROR', error);
+         })
+      // пустой массив в конце - чтоб отработало один раз
+   }, []);
+
+   return (
+      <div>
+         {/* если есть данные User отрисовать его - else Loading... */}
+         { user ?
+            <User
+               name={`${user.name.first} ${user.name.last}`}
+               avatar={user.picture.large}
+               email={user.email}
+               phone={user.phone}
+               gender={user.gender}
+               location={user.location.city}
+               login={user.login.username}
+               dob={user.dob.age}
+            /> :
+            <span className="d-flex m-auto">
+               <h2>Loading... Wait or Press F5 again</h2>
+            </span>
          }
-      });
-      // Получаем результаты
-      userData = userData.data.results[0];
-      // присваиваем новые значения и обновляем стейт и следом ререндерим.
-      const name = `${userData.name.first} ${userData.name.last}`;
-      const avatar = userData.picture.large;
-      const email = userData.email;
-      const phone = userData.phone;
-      const gender = userData.gender;
-      const location = userData.location.city;
-      const login = userData.login.username;
-      const dob = userData.dob.age;
-      // обновляем state
-      this.setState({
-         ...this.state, ...{
-            isLoading: false,
-            name,
-            phone,
-            avatar,
-            email,
-            gender,
-            location,
-            login,
-            dob
-         }
-      });
-   }
+      </div>
+   )
 }
+
 export default App;

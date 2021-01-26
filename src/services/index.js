@@ -1,9 +1,11 @@
 import axios from "axios";
 
-// экспорт обновленной версии axios с полученным api
-export default axios.create({
-   // используем адрес для получения api
-   baseURL: "https://randomuser.me/api/",
-   // получаем ответ в формате json
-   responseType: "json"
-});
+
+export default {
+   getUser() {
+      // обращаемся к api серваера
+      const url = 'https://randomuser.me/api/'
+      // получаем резутат в ввиде объекта
+      return axios.get(url)
+   },
+}
